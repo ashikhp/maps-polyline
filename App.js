@@ -1,20 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { View, Text } from 'react-native';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+const MultiplePointsMap = () => {
+    const points = [
+        { title: '1', coordinate: { latitude: 11.5550, longitude: 76.1349 } },
+        { title: '2', coordinate: { latitude: 11.5404, longitude: 76.1204 } },
+        { title: '3', coordinate: { latitude: 11.6025, longitude: 76.1325 } },
+        // Add more points as needed
+    ];
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    const coordinates = points.map(point => point.coordinate);
+
+    return (
+        <View style={{ flex: 1 }}>
+            <MapView
+                style={{ flex: 1 }}
+                initialRegion={{
+                    latitude: 11.5550,
+                    longitude: 76.1349,
+                    latitudeDelta: 0.1,
+                    longitudeDelta: 0.1,
+                }}
+            >
+                {points.map((point, index) => (
+                    <Marker
+                        key={point.id}
+                        coordinate={point.coordinate}
+                        title={point.title}
+                    >
+                        <View style={{ backgroundColor: 'white', padding: 5, borderRadius: 10, borderColor: 'black', borderWidth: 1 }}>
+                            <Text>{index + 1}</Text>
+                        </View>
+                    </Marker>
+                ))}
+                <Polyline
+                    coordinates={coordinates}
+                    strokeColor="red"
+                    strokeWidth={6}
+                />
+            </MapView>
+        </View>
+    );
+};
+
+export default MultiplePointsMap;
